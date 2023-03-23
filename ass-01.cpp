@@ -67,6 +67,3 @@ int main() {
     start_game();
 }
 
-
-$ git config -- user.name "Emeika"
-$ git config -- user.email seller.amazon.pks@gmail.com
