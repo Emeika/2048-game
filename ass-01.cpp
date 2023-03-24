@@ -63,6 +63,32 @@ void start_game() {
     move(grid);
 }
 
+void add_tile(int grid[4][4]){
+    int empty_tile[16][2];   //Store the empty cells in a new array 
+    int numEmptyCells = 0;   // Column is the x and y index of the empty grid cell and row is the number of empty indices of grid
+
+    for (int i = 0; i < 4; i++){   // Loop through each row and col of the grid
+        for (int j = 0; j < 4; j++) {
+            if (grid[i][j] == 0) {   // Check if empty then store the index value to the empty_tile array
+                empty_tile[numEmptyCells][0] = i;
+                empty_tile[numEmptyCells][1] = j;
+                numEmptyCells++;  // Number of empty cell adds up as a new index is stored in the array
+            }
+        }
+    }
+
+    if(numEmptyCells > 0) {  // Add a new tile when there are any empty cells
+        int random_tile = rand() % numEmptyCells;  // random number between 0 and Num of empty cell
+        int random_row = empty_tile[random_tile][0];  // get the row value stored in that cell of empty_tile
+        int random_col = empty_tile[random_tile][1];  // get the col value stored in that cell
+        int random_num = (rand() % 2) ? 4 : 2; // generates either 0 or 1 and sets random_num to either 2 or 4
+        grid[random_row][random_col] = random_num;  // place the random num to the available index in grid
+
+
+    }
+    display_grid(grid);
+}
+
 
 
 
