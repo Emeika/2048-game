@@ -136,7 +136,29 @@ void move(int grid[4][4]){
                     }
                     break;
 
-
+                case 'D':// Move tiles left
+                    for(int i = 0; i < 4; i++) {
+                        for(int j = 1; j < 4; j++) {
+                            if(grid[i][j] != 0) {
+                                int k = j;
+                                while(k > 0 && grid[i][k-1] == 0) {
+                                    grid[i][k-1] = grid[i][k];
+                                    grid[i][k] = 0;
+                                    k--;
+                                    moved = true;
+                                }
+                                if(k > 0 && grid[i][k-1] == grid[i][k]) {
+                                    grid[i][k-1] *= 2;
+                                    grid[i][k] = 0;
+                                    moved = true;
+                                }
+                            }
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
     } else {
         move(grid);
