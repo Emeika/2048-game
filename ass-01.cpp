@@ -115,8 +115,28 @@ void move(int grid[4][4]){
                         }
                     }
                     break;
+                case 'C':  //Move right
+                    for(int i = 0; i < 4; i++) {
+                        for(int j = 2; j >= 0; j--) {
+                            if(grid[i][j] != 0) {
+                                int k = j;
+                                while(k < 3 && grid[i][k+1] == 0) {
+                                    grid[i][k+1] = grid[i][k];
+                                    grid[i][k] = 0;
+                                    k++;
+                                    moved = true;
+                                }
+                                if(k < 3 && grid[i][k+1] == grid[i][k]) {
+                                    grid[i][k+1] *= 2;
+                                    grid[i][k] = 0;
+                                    moved = true;
+                                }
+                            }
+                        }
+                    }
+                    break;
 
-            }
+
         }
     } else {
         move(grid);
