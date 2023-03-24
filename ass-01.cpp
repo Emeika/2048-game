@@ -20,7 +20,7 @@ void display_grid(int grid[4][4]) {
             cout << "|-------|-------|-------|-------|" << endl;
         }
     }
-    cout << "\\-------|-------|-------|-------/" << endl;
+    cout << "\\-------|-------|-------|-------/" << endl << endl;
 
 }
 
@@ -58,10 +58,16 @@ void start_game() {
         }
     }
     display_grid(grid);
+
+    
     move(grid);
 }
 
+
+
+
 void move(int grid[4][4]){
+    int score = 0;
     bool moved = false;
 
     char ch;
@@ -87,7 +93,8 @@ void move(int grid[4][4]){
                                     moved = true;
                                 }
                                 if(k > 0 && grid[k-1][j] == grid[k][j]) {
-                                    grid[k-1][j] *= 2;
+                                    grid[k - 1][j] *= 2;
+                                    score += grid[k - 1][j];
                                     grid[k][j] = 0;
                                     moved = true;
                                 }
@@ -107,7 +114,8 @@ void move(int grid[4][4]){
                                     moved = true;
                                 }
                                 if(k < 3 && grid[k+1][j] == grid[k][j]) {
-                                    grid[k+1][j] *= 2;
+                                    grid[k + 1][j] *= 2;
+                                    score += grid[k + 1][j];
                                     grid[k][j] = 0;
                                     moved = true;
                                 }
@@ -127,7 +135,8 @@ void move(int grid[4][4]){
                                     moved = true;
                                 }
                                 if(k < 3 && grid[i][k+1] == grid[i][k]) {
-                                    grid[i][k+1] *= 2;
+                                    grid[i][k + 1] *= 2;
+                                    score += grid[k + 1][j];
                                     grid[i][k] = 0;
                                     moved = true;
                                 }
@@ -148,7 +157,8 @@ void move(int grid[4][4]){
                                     moved = true;
                                 }
                                 if(k > 0 && grid[i][k-1] == grid[i][k]) {
-                                    grid[i][k-1] *= 2;
+                                    grid[i][k - 1] *= 2;
+                                    score += grid[k - 1][j];
                                     grid[i][k] = 0;
                                     moved = true;
                                 }
@@ -164,21 +174,18 @@ void move(int grid[4][4]){
         move(grid);
     }
     display_grid(grid);
+    cout << "Score: " << score << endl;  // Print the score to the screen
 
     if(moved) {
         // Place a new tile
-
+        add_tile(grid);
 }
 
 
-
-
 int main() {
-
     int choice;
     cout << "\n     Welcome to 2048\n\nPress(1-3)\n1. START\n2. INSTRUCTIONS\n3. QUIT\n";
     cin >> choice;
-    move();
     while (choice != 3) {
         if (choice == 1){
             start_game();
@@ -197,7 +204,6 @@ int main() {
             cin >> choice;
         }
     }
-
 }
 
 
