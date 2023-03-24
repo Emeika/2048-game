@@ -86,33 +86,45 @@ void move(int grid[4][4]){
                                     k--;
                                     moved = true;
                                 }
-                                if(k > 0 && board[k-1][j] == board[k][j]) {
-                                    board[k-1][j] *= 2;
-                                    board[k][j] = 0;
+                                if(k > 0 && grid[k-1][j] == grid[k][j]) {
+                                    grid[k-1][j] *= 2;
+                                    grid[k][j] = 0;
                                     moved = true;
                                 }
                             }
                         }
                     }
                     break;
-                case 'B':
-                    cout << "Down arrow was pressed" << endl;
+                case 'B':  //Move down
+                    for(int j = 0; j < 4; j++) {
+                        for(int i = 2; i >= 0; i--) {
+                            if(grid[i][j] != 0) {
+                                int k = i;
+                                while(k < 3 && grid[k+1][j] == 0) {
+                                    grid[k+1][j] = grid[k][j];
+                                    grid[k][j] = 0;
+                                    k++;
+                                    moved = true;
+                                }
+                                if(k < 3 && grid[k+1][j] == grid[k][j]) {
+                                    grid[k+1][j] *= 2;
+                                    grid[k][j] = 0;
+                                    moved = true;
+                                }
+                            }
+                        }
+                    }
                     break;
-                case 'C':
-                    cout << "Right arrow was pressed" << endl;
-                    break;
-                case 'D':
-                    cout << "Left arrow was pressed" << endl;
-                    break;
-                default:
-                    cout << "Unknown arrow key was pressed" << endl;
-                    break;
+
             }
         }
     } else {
-        cout << "Not an arrow key" << endl;
+        move(grid);
     }
     display_grid(grid);
+
+    if(moved) {
+        // Place a new tile
 
 }
 
