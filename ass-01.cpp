@@ -58,9 +58,63 @@ void start_game() {
         }
     }
     display_grid(grid);
-    move();
+    move(grid);
 }
 
+void move(int grid[4][4]){
+    bool moved = false;
+
+    char ch;
+    cin >> ch;
+
+    if (ch == 27) { // Check if it's an escape sequence
+        char arrow;
+        cin >> arrow; // Read the next character
+
+        if (arrow == '[') { // Check if it's a control sequence
+            cin >> arrow; // Read the control character
+
+            switch (arrow) { // Check which arrow key was pressed
+                case 'A':
+                    for (int j = 0; j < 4;  j++){ 
+                        for (int i = 1; i < 4; i++){
+                            if(grid[i][j] != 0) {
+                                int k = i;
+                                while(k > 0 && grid[k-1][j] == 0) {
+                                    grid[k-1][j] = grid[k][j];
+                                    grid[k][j] = 0;
+                                    k--;
+                                    moved = true;
+                                }
+                                if(k > 0 && board[k-1][j] == board[k][j]) {
+                                    board[k-1][j] *= 2;
+                                    board[k][j] = 0;
+                                    moved = true;
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case 'B':
+                    cout << "Down arrow was pressed" << endl;
+                    break;
+                case 'C':
+                    cout << "Right arrow was pressed" << endl;
+                    break;
+                case 'D':
+                    cout << "Left arrow was pressed" << endl;
+                    break;
+                default:
+                    cout << "Unknown arrow key was pressed" << endl;
+                    break;
+            }
+        }
+    } else {
+        cout << "Not an arrow key" << endl;
+    }
+    display_grid(grid);
+
+}
 
 
 
