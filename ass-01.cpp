@@ -54,126 +54,140 @@ void add_tile(int grid[4][4], int &score){
 
 
     }
+    system("cls");
     display_grid(grid, score);
 }
 
-bool game_over(int grid[4][4], int &score){
-    
+bool game_over(int grid[4][4]){
 
+    for (int i = 0; i < 4; i++){
+        for (int j = 0; j < 4; j++) {
+            if (grid[i][j] == 2048) {
+                return true;
+            }
+            if (grid[i][j] ==0) {
+                return false;
+            }
+            if(grid[i][j] == grid[i][j+1] || grid[i][j] == grid[i+1][j]) {
+                return false;
+            }
+        }
+    }
 }
 
 void movement(int grid[4][4], int &score) {
     bool moved = false;
 
-    int c, ex;
-    c = getch();
-
-    if (c && c != 224){
-        return;
-    }
-    else{
-        switch (ex = getch()) { 
-            case KEY_UP: // Move up
-                for (int j = 0; j < 4; j++) {
-                    for (int i = 1; i < 4; i++) {
-                        if (grid[i][j] != 0) {
-                            int k = i;
-                            while (k > 0 && grid[k-1][j] == 0) {
-                                grid[k-1][j] = grid[k][j];
-                                grid[k][j] = 0;
-                                k--;
-                                moved = true;
-                            }
-                            if (k > 0 && grid[k-1][j] == grid[k][j]) {
-                                grid[k-1][j] *= 2;
-                                score += grid[k-1][j];
-                                grid[k][j] = 0;
-                                moved = true;
-                            }
-                        }
-                    }
-                }
-                break;
-            case KEY_DOWN: // Move down
-                for (int j = 0; j < 4; j++) {
-                    for (int i = 2; i >= 0; i--) {
-                        if (grid[i][j] != 0) {
-                            int k = i;
-                            while (k < 3 && grid[k+1][j] == 0) {
-                                grid[k+1][j] = grid[k][j];
-                                grid[k][j] = 0;
-                                k++;
-                                moved = true;
-                            }
-                            if (k < 3 && grid[k+1][j] == grid[k][j]) {
-                                grid[k+1][j] *= 2;
-                                score += grid[k+1][j];
-                                grid[k][j] = 0;
-                                moved = true;
+    while (!game_over(grid)) {
+        int c, ex;
+        c = getch();
+        if (c && c != 224){
+            return;
+        }
+        else{
+            switch (ex = getch()) { 
+                case KEY_UP: // Move up
+                    for (int j = 0; j < 4; j++) {
+                        for (int i = 1; i < 4; i++) {
+                            if (grid[i][j] != 0) {
+                                int k = i;
+                                while (k > 0 && grid[k-1][j] == 0) {
+                                    grid[k-1][j] = grid[k][j];
+                                    grid[k][j] = 0;
+                                    k--;
+                                    moved = true;
+                                }
+                                if (k > 0 && grid[k-1][j] == grid[k][j]) {
+                                    grid[k-1][j] *= 2;
+                                    score += grid[k-1][j];
+                                    grid[k][j] = 0;
+                                    moved = true;
+                                }
                             }
                         }
                     }
-                }
-                break;
-            case KEY_RIGHT: // Move right
-                for (int i = 0; i < 4; i++) {
-                    for (int j = 2; j >= 0; j--) {
-                        if (grid[i][j] != 0) {
-                            int k = j;
-                            while (k < 3 && grid[i][k+1] == 0) {
-                                grid[i][k+1] = grid[i][k];
-                                grid[i][k] = 0;
-                                k++;
-                                moved = true;
-                            }
-                            if (k < 3 && grid[i][k+1] == grid[i][k]) {
-                                grid[i][k+1] *= 2;
-                                score += grid[i][k+1];
-                                grid[i][k] = 0;
-                                moved = true;
-                            }
-                        }
-                    }
-                }
-                break;
-            case KEY_LEFT: // Move left
-                for (int i = 0; i < 4; i++) {
-                    for (int j = 1; j < 4; j++) {
-                        if (grid[i][j] != 0) {
-                            int k = j;
-                            while (k > 0 && grid[i][k-1] == 0) {
-                                grid[i][k-1] = grid[i][k];
-                                grid[i][k] = 0;
-                                k--;
-                                moved = true;
-                            }
-                            if (k > 0 && grid[i][k-1] == grid[i][k]) {
-                                grid[i][k-1] *= 2;
-                                score += grid[i][k-1];
-                                grid[i][k] = 0;
-                                moved = true;
+                    break;
+                case KEY_DOWN: // Move down
+                    for (int j = 0; j < 4; j++) {
+                        for (int i = 2; i >= 0; i--) {
+                            if (grid[i][j] != 0) {
+                                int k = i;
+                                while (k < 3 && grid[k+1][j] == 0) {
+                                    grid[k+1][j] = grid[k][j];
+                                    grid[k][j] = 0;
+                                    k++;
+                                    moved = true;
+                                }
+                                if (k < 3 && grid[k+1][j] == grid[k][j]) {
+                                    grid[k+1][j] *= 2;
+                                    score += grid[k+1][j];
+                                    grid[k][j] = 0;
+                                    moved = true;
+                                }
                             }
                         }
                     }
-                }
-                break;
-            default:
-                return;
+                    break;
+                case KEY_RIGHT: // Move right
+                    for (int i = 0; i < 4; i++) {
+                        for (int j = 2; j >= 0; j--) {
+                            if (grid[i][j] != 0) {
+                                int k = j;
+                                while (k < 3 && grid[i][k+1] == 0) {
+                                    grid[i][k+1] = grid[i][k];
+                                    grid[i][k] = 0;
+                                    k++;
+                                    moved = true;
+                                }
+                                if (k < 3 && grid[i][k+1] == grid[i][k]) {
+                                    grid[i][k+1] *= 2;
+                                    score += grid[i][k+1];
+                                    grid[i][k] = 0;
+                                    moved = true;
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case KEY_LEFT: // Move left
+                    for (int i = 0; i < 4; i++) {
+                        for (int j = 1; j < 4; j++) {
+                            if (grid[i][j] != 0) {
+                                int k = j;
+                                while (k > 0 && grid[i][k-1] == 0) {
+                                    grid[i][k-1] = grid[i][k];
+                                    grid[i][k] = 0;
+                                    k--;
+                                    moved = true;
+                                }
+                                if (k > 0 && grid[i][k-1] == grid[i][k]) {
+                                    grid[i][k-1] *= 2;
+                                    score += grid[i][k-1];
+                                    grid[i][k] = 0;
+                                    moved = true;
+                                }
+                            }
+                        }
+                    }
+                    break;
+                default:
+                    return;
+            }
+        }
+        system("cls");
+        display_grid(grid, score);
+        if (moved) {
+            // Place a new tile
+            add_tile(grid, score);
         }
     }
-
-    display_grid(grid, score);
-
-    if (moved) {
-        // Place a new tile
-        add_tile(grid, score);
-    }
-
 }
 
 
 // This function initializes a 4x4 grid with all values starting at 0.
 void start_game() {
+    system("cls"); //To clear screen
+
     int grid[4][4]; // Initializes an integer array called 'grid' with dimensions of 4x4.
     srand(time(0));
     int rand_row1 = rand() % 4;
@@ -210,8 +224,6 @@ void start_game() {
     movement(grid, s);
 
 }
-
-
 
 
 int main() {
