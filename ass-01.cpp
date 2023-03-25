@@ -1,8 +1,14 @@
+#include <conio.h>
 #include <iostream>
-#include <string>
+
 using namespace std;
 
-void display_grid(int grid[4][4]) {
+#define KEY_UP    72
+#define KEY_LEFT  75
+#define KEY_RIGHT 77
+#define KEY_DOWN  80
+
+void display_grid(int grid[4][4],int &score) {
 
     cout << "/-------|-------|-------|-------\\" << endl;
     for (int i = 0; i < 4; i++){ // Loop through each row
@@ -21,6 +27,147 @@ void display_grid(int grid[4][4]) {
         }
     }
     cout << "\\-------|-------|-------|-------/" << endl << endl;
+    cout << "Score: " << score << endl;  // Print the score to the screen
+
+}
+
+void add_tile(int grid[4][4], int &score){
+    int empty_tile[16][2];   //Store the empty cells in a new array 4x4 = 16
+    int numEmptyCells = 0;   // Column is the x and y index of the empty grid cell and row is the number of empty indices of grid
+
+    for (int i = 0; i < 4; i++){   // Loop through each row and col of the grid
+        for (int j = 0; j < 4; j++) {
+            if (grid[i][j] == 0) {   // Check if empty then store the index value to the empty_tile array
+                empty_tile[numEmptyCells][0] = i;
+                empty_tile[numEmptyCells][1] = j;
+                numEmptyCells++;  // Number of empty cell adds up as a new index is stored in the array
+            }
+        }
+    }
+
+    if(numEmptyCells > 0) {  // Add a new tile when there are any empty cells
+        int random_tile = rand() % numEmptyCells;  // random number between 0 and Num of empty cell
+        int random_row = empty_tile[random_tile][0];  // get the row value stored in that cell of empty_tile
+        int random_col = empty_tile[random_tile][1];  // get the col value stored in that cell
+        int random_num = (rand() % 2) ? 4 : 2; // generates either 0 or 1 and sets random_num to either 2 or 4
+        grid[random_row][random_col] = random_num;  // place the random num to the available index in grid
+
+
+    }
+    display_grid(grid, score);
+}
+
+bool game_over(int grid[4][4], int &score){
+    
+
+}
+
+void movement(int grid[4][4], int &score) {
+    bool moved = false;
+
+    int c, ex;
+    c = getch();
+
+    if (c && c != 224){
+        return;
+    }
+    else{
+        switch (ex = getch()) { 
+            case KEY_UP: // Move up
+                for (int j = 0; j < 4; j++) {
+                    for (int i = 1; i < 4; i++) {
+                        if (grid[i][j] != 0) {
+                            int k = i;
+                            while (k > 0 && grid[k-1][j] == 0) {
+                                grid[k-1][j] = grid[k][j];
+                                grid[k][j] = 0;
+                                k--;
+                                moved = true;
+                            }
+                            if (k > 0 && grid[k-1][j] == grid[k][j]) {
+                                grid[k-1][j] *= 2;
+                                score += grid[k-1][j];
+                                grid[k][j] = 0;
+                                moved = true;
+                            }
+                        }
+                    }
+                }
+                break;
+            case KEY_DOWN: // Move down
+                for (int j = 0; j < 4; j++) {
+                    for (int i = 2; i >= 0; i--) {
+                        if (grid[i][j] != 0) {
+                            int k = i;
+                            while (k < 3 && grid[k+1][j] == 0) {
+                                grid[k+1][j] = grid[k][j];
+                                grid[k][j] = 0;
+                                k++;
+                                moved = true;
+                            }
+                            if (k < 3 && grid[k+1][j] == grid[k][j]) {
+                                grid[k+1][j] *= 2;
+                                score += grid[k+1][j];
+                                grid[k][j] = 0;
+                                moved = true;
+                            }
+                        }
+                    }
+                }
+                break;
+            case KEY_RIGHT: // Move right
+                for (int i = 0; i < 4; i++) {
+                    for (int j = 2; j >= 0; j--) {
+                        if (grid[i][j] != 0) {
+                            int k = j;
+                            while (k < 3 && grid[i][k+1] == 0) {
+                                grid[i][k+1] = grid[i][k];
+                                grid[i][k] = 0;
+                                k++;
+                                moved = true;
+                            }
+                            if (k < 3 && grid[i][k+1] == grid[i][k]) {
+                                grid[i][k+1] *= 2;
+                                score += grid[i][k+1];
+                                grid[i][k] = 0;
+                                moved = true;
+                            }
+                        }
+                    }
+                }
+                break;
+            case KEY_LEFT: // Move left
+                for (int i = 0; i < 4; i++) {
+                    for (int j = 1; j < 4; j++) {
+                        if (grid[i][j] != 0) {
+                            int k = j;
+                            while (k > 0 && grid[i][k-1] == 0) {
+                                grid[i][k-1] = grid[i][k];
+                                grid[i][k] = 0;
+                                k--;
+                                moved = true;
+                            }
+                            if (k > 0 && grid[i][k-1] == grid[i][k]) {
+                                grid[i][k-1] *= 2;
+                                score += grid[i][k-1];
+                                grid[i][k] = 0;
+                                moved = true;
+                            }
+                        }
+                    }
+                }
+                break;
+            default:
+                return;
+        }
+    }
+
+    display_grid(grid, score);
+
+    if (moved) {
+        // Place a new tile
+        add_tile(grid, score);
+    }
 
 }
 
@@ -57,155 +204,14 @@ void start_game() {
 
         }
     }
-    display_grid(grid);
+    int s = 0; //Score
+    display_grid(grid, s);
 
-    
-    move(grid);
-}
+    movement(grid, s);
 
-void add_tile(int grid[4][4]){
-    int empty_tile[16][2];   //Store the empty cells in a new array 
-    int numEmptyCells = 0;   // Column is the x and y index of the empty grid cell and row is the number of empty indices of grid
-
-    for (int i = 0; i < 4; i++){   // Loop through each row and col of the grid
-        for (int j = 0; j < 4; j++) {
-            if (grid[i][j] == 0) {   // Check if empty then store the index value to the empty_tile array
-                empty_tile[numEmptyCells][0] = i;
-                empty_tile[numEmptyCells][1] = j;
-                numEmptyCells++;  // Number of empty cell adds up as a new index is stored in the array
-            }
-        }
-    }
-
-    if(numEmptyCells > 0) {  // Add a new tile when there are any empty cells
-        int random_tile = rand() % numEmptyCells;  // random number between 0 and Num of empty cell
-        int random_row = empty_tile[random_tile][0];  // get the row value stored in that cell of empty_tile
-        int random_col = empty_tile[random_tile][1];  // get the col value stored in that cell
-        int random_num = (rand() % 2) ? 4 : 2; // generates either 0 or 1 and sets random_num to either 2 or 4
-        grid[random_row][random_col] = random_num;  // place the random num to the available index in grid
-
-
-    }
-    display_grid(grid);
 }
 
 
-
-
-void move(int grid[4][4]){
-    int score = 0;
-    bool moved = false;
-
-    char ch;
-    cin >> ch;
-
-    if (ch == 27) { // Check if it's an escape sequence
-        char arrow;
-        cin >> arrow; // Read the next character
-
-        if (arrow == '[') { // Check if it's a control sequence
-            cin >> arrow; // Read the control character
-
-            switch (arrow) { // Check which arrow key was pressed
-                case 'A':
-                    for (int j = 0; j < 4;  j++){ 
-                        for (int i = 1; i < 4; i++){
-                            if(grid[i][j] != 0) {
-                                int k = i;
-                                while(k > 0 && grid[k-1][j] == 0) {
-                                    grid[k-1][j] = grid[k][j];
-                                    grid[k][j] = 0;
-                                    k--;
-                                    moved = true;
-                                }
-                                if(k > 0 && grid[k-1][j] == grid[k][j]) {
-                                    grid[k - 1][j] *= 2;
-                                    score += grid[k - 1][j];
-                                    grid[k][j] = 0;
-                                    moved = true;
-                                }
-                            }
-                        }
-                    }
-                    break;
-                case 'B':  //Move down
-                    for(int j = 0; j < 4; j++) {
-                        for(int i = 2; i >= 0; i--) {
-                            if(grid[i][j] != 0) {
-                                int k = i;
-                                while(k < 3 && grid[k+1][j] == 0) {
-                                    grid[k+1][j] = grid[k][j];
-                                    grid[k][j] = 0;
-                                    k++;
-                                    moved = true;
-                                }
-                                if(k < 3 && grid[k+1][j] == grid[k][j]) {
-                                    grid[k + 1][j] *= 2;
-                                    score += grid[k + 1][j];
-                                    grid[k][j] = 0;
-                                    moved = true;
-                                }
-                            }
-                        }
-                    }
-                    break;
-                case 'C':  //Move right
-                    for(int i = 0; i < 4; i++) {
-                        for(int j = 2; j >= 0; j--) {
-                            if(grid[i][j] != 0) {
-                                int k = j;
-                                while(k < 3 && grid[i][k+1] == 0) {
-                                    grid[i][k+1] = grid[i][k];
-                                    grid[i][k] = 0;
-                                    k++;
-                                    moved = true;
-                                }
-                                if(k < 3 && grid[i][k+1] == grid[i][k]) {
-                                    grid[i][k + 1] *= 2;
-                                    score += grid[k + 1][j];
-                                    grid[i][k] = 0;
-                                    moved = true;
-                                }
-                            }
-                        }
-                    }
-                    break;
-
-                case 'D':// Move tiles left
-                    for(int i = 0; i < 4; i++) {
-                        for(int j = 1; j < 4; j++) {
-                            if(grid[i][j] != 0) {
-                                int k = j;
-                                while(k > 0 && grid[i][k-1] == 0) {
-                                    grid[i][k-1] = grid[i][k];
-                                    grid[i][k] = 0;
-                                    k--;
-                                    moved = true;
-                                }
-                                if(k > 0 && grid[i][k-1] == grid[i][k]) {
-                                    grid[i][k - 1] *= 2;
-                                    score += grid[k - 1][j];
-                                    grid[i][k] = 0;
-                                    moved = true;
-                                }
-                            }
-                        }
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-    } else {
-        move(grid);
-    }
-    display_grid(grid);
-    cout << "Score: " << score << endl;  // Print the score to the screen
-
-    if(moved) {
-        // Place a new tile
-        add_tile(grid);
-}
 
 
 int main() {
