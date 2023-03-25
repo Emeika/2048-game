@@ -62,19 +62,33 @@ void add_tile(int grid[4][4], int &score){
 
 bool game_over(int grid[4][4]){
 
-    for (int i = 0; i < 4; i++){
-        for (int j = 0; j < 4; j++) {
-            if (grid[i][j] == 2048) {
+    // Check if any tile has reached 2048
+    for(int i = 0; i < 4; i++) {
+        for(int j = 0; j < 4; j++) {
+            if(grid[i][j] == 2048) {
                 return true;
             }
-            if (grid[i][j] ==0) {
+        }
+    }
+
+    // Check if there are any empty cells
+    for(int i = 0; i < 4; i++) {
+        for(int j = 0; j < 4; j++) {
+            if(grid[i][j] == 0) {
                 return false;
             }
+        }
+    }
+
+    // Check if there are any adjacent tiles with the same value
+    for(int i = 0; i < 3; i++) {
+        for(int j = 0; j < 3; j++) {
             if(grid[i][j] == grid[i][j+1] || grid[i][j] == grid[i+1][j]) {
                 return false;
             }
         }
     }
+
     return true;
 }
 
@@ -87,7 +101,7 @@ void movement(int grid[4][4], int &score) {
         int c, ex;
         c = getch();
         if (c && c != 224){
-            return;
+            continue;
         }
         else{
             switch (ex = getch()) { 
@@ -176,7 +190,7 @@ void movement(int grid[4][4], int &score) {
                     }
                     break;
                 default:
-                    return;
+                    continue;
             }
         }
         system("cls");
@@ -186,24 +200,24 @@ void movement(int grid[4][4], int &score) {
             add_tile(grid, score);
         }
     }
-    if (game_over){
-        system("cls");
 
-        cout << "\n\n";
-        cout << "====================================\n" << endl;
-        cout << "            Game Over               \n" << endl;
-        cout << "====================================\n" << endl;
-        cout << "    Congratulations!          \n" << endl;
-        cout << "    Best Record: " << score << endl;
+    //system("cls");
+
+    cout << "\n\n";
+    cout << "====================================\n" << endl;
+    cout << "            Game Over               \n" << endl;
+    cout << "====================================\n" << endl;
+    cout << "    Congratulations!          \n" << endl;
+    cout << "    Best Record: " << score << endl;
+    cout << "====================================\n\n" << endl;
+    if (bst_score < score) {
+        cout << "    New Record Made!               \n" << endl;
         cout << "====================================\n\n" << endl;
-        if (bst_score < score) {
-            cout << "    New Record Made!               \n" << endl;
-            cout << "====================================\n\n" << endl;
-            bst_score = score;
-
-        }
+        bst_score = score;
 
     }
+
+
     
 }
 
@@ -275,7 +289,7 @@ int main() {
             cout << "If two tiles of the same number collide while moving, they merge into a single tile with the total value of the two tiles.\n";
             cout << "Every time the player makes a move, a new tile randomly appears on the grid with a value of either 2 or 4.\n";
             cout << "The game ends when the player reaches the 2048 tile or there are no more possible moves.\n";
-            cout << "Move on the tiles using the arrow keys. ← → ↑ ↓ \n\n";
+            cout << "Move on the tiles using the arrow keys.\n\n";
             cout << "Press(1-3)\n1. START New Game\n2. INSTRUCTIONS\n3. QUIT\n";
             cin >> choice;
         }
