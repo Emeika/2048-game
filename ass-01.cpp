@@ -1,5 +1,6 @@
 #include <conio.h>
 #include <iostream>
+#include <iomanip>  // Include the <iomanip> library for setw()
 
 using namespace std;
 
@@ -15,10 +16,10 @@ void display_grid(int grid[4][4],int &score) {
     for (int i = 0; i < 4; i++){ // Loop through each row
         for (int j = 0; j < 4; j++){ // Loop through each column
             if (grid[i][j] == 0) {
-                cout << "|" << "\t";  // Print empty space when 0/ No value
+                cout << "|" << setw(7) << " ";  // Print empty space when 0/ No value
             }
             else {
-                cout << "|" << "      " << grid[i][j]; // Print the value at position (i,j)
+                cout << "|" << setw(7) << grid[i][j]; // Print the value at position (i,j)
             }
             
         }
@@ -201,7 +202,7 @@ void movement(int grid[4][4], int &score) {
         }
     }
 
-    //system("cls");
+    system("cls");
 
     cout << "\n\n";
     cout << "====================================\n" << endl;
@@ -274,8 +275,11 @@ int main() {
             cout << "1. Restart New game\n" << endl;
             cout << "2. Exit to main menu\n" << endl;
             cin >> inp;
-            if (inp == 1) {
+            while (inp == 1) {
                 start_game(bst_score);
+                cout << "1. Restart New game\n" << endl;
+                cout << "2. Exit to main menu\n" << endl;
+                cin >> inp;
             }
             system("cls");
             
