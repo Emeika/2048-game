@@ -7,10 +7,11 @@ using namespace std;
 #define KEY_LEFT  75
 #define KEY_RIGHT 77
 #define KEY_DOWN  80
+int bst_score = 0;
 
 void display_grid(int grid[4][4],int &score) {
 
-    cout << "/-------|-------|-------|-------\\" << endl;
+    cout << "\n/-------|-------|-------|-------\\" << endl;
     for (int i = 0; i < 4; i++){ // Loop through each row
         for (int j = 0; j < 4; j++){ // Loop through each column
             if (grid[i][j] == 0) {
@@ -27,8 +28,9 @@ void display_grid(int grid[4][4],int &score) {
         }
     }
     cout << "\\-------|-------|-------|-------/" << endl << endl;
+    cout << "================================" << endl;
     cout << "Score: " << score << endl;  // Print the score to the screen
-
+    cout << "High Score: " << bst_score << endl;
 }
 
 void add_tile(int grid[4][4], int &score){
@@ -73,7 +75,10 @@ bool game_over(int grid[4][4]){
             }
         }
     }
+    return true;
 }
+
+
 
 void movement(int grid[4][4], int &score) {
     bool moved = false;
@@ -181,11 +186,30 @@ void movement(int grid[4][4], int &score) {
             add_tile(grid, score);
         }
     }
+    if (game_over){
+        system("cls");
+
+        cout << "\n\n";
+        cout << "====================================\n" << endl;
+        cout << "            Game Over               \n" << endl;
+        cout << "====================================\n" << endl;
+        cout << "    Congratulations!          \n" << endl;
+        cout << "    Best Record: " << score << endl;
+        cout << "====================================\n\n" << endl;
+        if (bst_score < score) {
+            cout << "    New Record Made!               \n" << endl;
+            cout << "====================================\n\n" << endl;
+            bst_score = score;
+
+        }
+
+    }
+    
 }
 
 
 // This function initializes a 4x4 grid with all values starting at 0.
-void start_game() {
+void start_game(int &bst_score) {
     system("cls"); //To clear screen
 
     int grid[4][4]; // Initializes an integer array called 'grid' with dimensions of 4x4.
@@ -227,12 +251,20 @@ void start_game() {
 
 
 int main() {
-    int choice;
+    int choice, inp, bst_score=0;
     cout << "\n     Welcome to 2048\n\nPress(1-3)\n1. START\n2. INSTRUCTIONS\n3. QUIT\n";
     cin >> choice;
     while (choice != 3) {
         if (choice == 1){
-            start_game();
+            start_game(bst_score);
+            cout << "1. Restart New game\n" << endl;
+            cout << "2. Exit to main menu\n" << endl;
+            cin >> inp;
+            if (inp == 1) {
+                start_game(bst_score);
+            }
+            system("cls");
+            
             cout << "Press(1-3)\n1. START New Game\n2. INSTRUCTIONS\n3. QUIT\n";
             cin >> choice;
         }
