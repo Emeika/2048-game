@@ -237,6 +237,7 @@ void movement(int grid[4][4], int &score) {
         }
     
         // After each movement, display the updated grid and score
+        system("cls");
         display_grid(grid, score);
     
         // If any movement was made, place a new tile on the grid
@@ -329,6 +330,7 @@ int main() {
             cin >> choice;
         }
         else if (choice == 2) {
+            system("cls");
             cout << "When the user choose Start, the game starts with two tiles, each with a value of either 2 or 4, on a 4x4 grid. \n";
             cout << "The player can move the tiles up, down, left, or right using the arrow keys.All tiles slide as far as possible in the chosen direction,\n";
             cout << "until they are stopped by either another tile or the edge of the grid.\n";
